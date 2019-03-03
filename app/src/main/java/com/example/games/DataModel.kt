@@ -1,8 +1,6 @@
 package com.example.games
 
-inline fun<reified Celda > matrix2d(ancho: Int,
-                                    alto: Int,
-                                    noinline  param: (Int) -> Celda ): Array<Array<Celda>>
+inline fun<reified Celda > matrix2d(ancho: Int, alto: Int, noinline  param: (Int) -> Celda ): Array<Array<Celda>>
 = Array(ancho){ Array<Celda>(alto, param ) }
 
 
@@ -14,8 +12,7 @@ enum class EstadoJuego{
     GANO_CRUZ, GANO_BOLA, EMPATADO, JUGANDO
 }
 
-class Celda(val renglon: Int, val columna: Int, var  estadoCelda: Ficha){
-
+class Celda(val renglon: Int, val columna: Int, var  estadoCelda: Ficha) {
 
     fun limpiaCelda(){
         estadoCelda = Ficha.VACIO
@@ -38,13 +35,14 @@ class Tablero{
 
     var celdas = matrix2d<Celda?>(ancho, alto){null}
 
-    init{
+    init {
         for(r in 0 until ancho){
             for (c in 0 until alto){
                 celdas[r][c] = Celda(r,c, Ficha.VACIO)
             }
         }
     }
+
     fun init() {
         for (r in 0 until ancho) {
             for (c in 0 until alto) {
@@ -52,7 +50,8 @@ class Tablero{
             }
         }
     }
-    fun print(){
+
+    fun print() {
         for(r in 0 until ancho){
             for (c in 0 until alto){
                 print(celdas[r][c] )
@@ -60,9 +59,6 @@ class Tablero{
             println()
         }
     }
-
-
-
 
     fun empate(): Boolean {
         for (r in 0 until ancho) {
@@ -74,40 +70,76 @@ class Tablero{
     }
 
     /*
-   *
-   * Completa el código
-   *
-   * Debes crear la función de que indica si ganó un jugador pero por celda.
-   *
-   * */
+    *
+    * Completa el código
+    *
+    * Debes crear la función de que indica si ganó un jugador pero por celda.
+    *
+    * */
     fun gano(player: Ficha): Boolean {
-        var win  = false
-
-
+        val win = celdas[0][0]?.estadoCelda == player
+                && celdas[1][0]?.estadoCelda == player
+                && celdas[2][0]?.estadoCelda == player
+                ||
+                   celdas[0][1]?.estadoCelda == player
+                && celdas[1][1]?.estadoCelda == player
+                && celdas[2][1]?.estadoCelda == player
+                ||
+                   celdas[0][2]?.estadoCelda == player
+                && celdas[1][2]?.estadoCelda == player
+                && celdas[2][2]?.estadoCelda == player
+                ||
+                   celdas[0][0]?.estadoCelda == player
+                && celdas[0][1]?.estadoCelda == player
+                && celdas[0][2]?.estadoCelda == player
+                ||
+                   celdas[1][0]?.estadoCelda == player
+                && celdas[1][1]?.estadoCelda == player
+                && celdas[1][2]?.estadoCelda == player
+                ||
+                   celdas[2][0]?.estadoCelda == player
+                && celdas[2][1]?.estadoCelda == player
+                && celdas[2][2]?.estadoCelda == player
+                ||
+                   celdas[0][0]?.estadoCelda == player
+                && celdas[1][1]?.estadoCelda == player
+                && celdas[2][2]?.estadoCelda == player
+                ||
+                   celdas[0][2]?.estadoCelda == player
+                && celdas[1][1]?.estadoCelda == player
+                && celdas[2][0]?.estadoCelda == player
 
         return win
     }
     /*
-*
-* Completa el código
-*
-* La función debe de asignar en cada posición de la matriz de celdas que corresponda:
-*
-* Para p1, asignas Ficha.CRUZ
-* Para p2, asignas Ficha.BOLA
-*
-* Completa: setTablero y setFecha, en setFicha utiliza un when
-* */
+    *
+    * Completa el código
+    *
+    * La función debe de asignar en cada posición de la matriz de celdas que corresponda:
+    *
+    * Para p1, asignas Ficha.CRUZ
+    * Para p2, asignas Ficha.BOLA
+    *
+    * Completa: setTablero y setFicha, en setFicha utiliza un when
+    * */
     fun setTablero( p1: ArrayList<Int>,  p2: ArrayList<Int>){
+        for (j in p1) {
+            var i = j-1;
+            celdas[i/3][i%3]?.estadoCelda = Ficha.CRUZ;
+        }
+        for (j in p2) {
+            var i = j-1;
+            celdas[i/3][i%3]?.estadoCelda = Ficha.BOLA;
+        }
 
     }
 
-    fun setFicha(posicion: Int,ficha: Ficha ){
-
+    fun setFicha(posicion: Int, ficha: Ficha ){
+        var i = posicion-1;
+        celdas[i%3][i/3]?.estadoCelda = ficha
     }
 
 }
-
 
 class JugadorAutomatic(tablero: Tablero) {
 
@@ -164,14 +196,13 @@ class JugadorAutomatic(tablero: Tablero) {
                     * Agrega el llamado recursivo de minimax y obtén la calificación Actual
 
                     * */
-                    calificacionActual = 0
+                    calificacionActual = minimax(profundidad-1, contrario)[0]
                     if(calificacionActual > mejorCalificacion) {
                         mejorCalificacion = calificacionActual
                         mejorRenglon = it[0]
                         mejorColumna = it[1]
                     }
                 } else {
-
                     /*
                     *
                     * Completa el código:
@@ -179,7 +210,7 @@ class JugadorAutomatic(tablero: Tablero) {
                     * Agrega el llamado recursivo de minimax y obtén la calificación Actual
 
                     * */
-                    calificacionActual = 0
+                    calificacionActual =  minimax(profundidad-1, miFicha)[0]
                     if(calificacionActual < mejorCalificacion) {
                         mejorCalificacion = calificacionActual
                         mejorRenglon = it[0]
@@ -207,8 +238,6 @@ class JugadorAutomatic(tablero: Tablero) {
         }
         return siguientesMovimientos
     }
-
-
 
     fun evaluacion(): Int {
         var calificacion = 0
@@ -271,6 +300,7 @@ class JugadorAutomatic(tablero: Tablero) {
     }
 
 }
+
 fun main(ags: Array<String>){
 
     println(Ficha.BOLA)
@@ -286,6 +316,4 @@ fun main(ags: Array<String>){
     val salida = computer.calculaMovimiento()
     println( salida?.get(0))
     println( salida?.get(1))
-
-
 }
