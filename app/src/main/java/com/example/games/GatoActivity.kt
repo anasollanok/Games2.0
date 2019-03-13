@@ -6,6 +6,7 @@ import android.os.Handler
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.collections.ArrayList
 
 
@@ -82,12 +83,28 @@ class GatoActivity : AppCompatActivity() {
         }
 
         gameOn(buttonCode, selectedButton)
+        if (andTheWinnerIs(p1)){
+            Toast.makeText(this, "AND the winner is PLAYER 1", Toast.LENGTH_LONG).show()
+        }
+        else if(andTheWinnerIs(p2)){
+            Toast.makeText(this, "AND the winner is PLAYER 2", Toast.LENGTH_LONG).show()
+        }else if(tablero.empate()){
+            Toast.makeText(this, "Draw", Toast.LENGTH_LONG).show()
+        }
         /*
         Completa el código:
         Llama a la función de "move" utilzando un Handler().postDelayed de 1 segundo
         * */
         Handler().postDelayed(Runnable {
             move()
+            if (andTheWinnerIs(p1)){
+                Toast.makeText(this, "AND the winner is PLAYER 1", Toast.LENGTH_LONG).show()
+            }
+            else if(andTheWinnerIs(p2)){
+                Toast.makeText(this, "AND the winner is PLAYER 2", Toast.LENGTH_LONG).show()
+            }else if(tablero.empate()){
+                Toast.makeText(this, "Draw", Toast.LENGTH_LONG).show()
+            }
         }, 1000)
 
        if (andTheWinnerIs(p1)){
@@ -109,32 +126,18 @@ class GatoActivity : AppCompatActivity() {
 
      * */
     fun nextFicha(renglon: Int, columna: Int): Pair<Int, Button> {
-        var numFicha = 1
-        var count = 1
-        var button = findViewById(R.id.button) as Button
-
-        for (i in 0..2){
-            for (j in 0..2){
-                if((renglon == i) && (columna == j)){
-                    numFicha = count
-                }
-                count++
-            }
-        }
-
-        when(numFicha){
-            1 -> button = findViewById(R.id.button) as Button
-            2 -> button = findViewById(R.id.button2) as Button
-            3 -> button = findViewById(R.id.button3) as Button
-            4 -> button = findViewById(R.id.button4) as Button
-            5 -> button = findViewById(R.id.button5) as Button
-            6 -> button = findViewById(R.id.button6) as Button
-            7 -> button = findViewById(R.id.button7) as Button
-            8 -> button = findViewById(R.id.button8) as Button
-            9 -> button = findViewById(R.id.button9) as Button
-        }
-
-        var pair = Pair(numFicha, button)
+        val but = renglon*3+columna+1
+        var pair = Pair(but,when(but){
+            1 -> button
+            2-> button2
+            3 -> button3
+            4 -> button4
+            5 -> button5
+            6 -> button6
+            7 -> button7
+            8 -> button8
+            else -> button9
+        })
         return pair
     }
 
