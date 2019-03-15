@@ -192,9 +192,13 @@ class JugadorAutomatic(tablero: Tablero) {
                     /*
                     *
                     * Completa el código:
-                    *
                     * Agrega el llamado recursivo de minimax y obtén la calificación Actual
-
+                    *
+                    * Minimax es un algoritmo de en teoría de juegos que sirve para obtener la score más óptima
+                    * para un jugador (computadora). La recursión del algoritmo trata de hacer varios lookaheads
+                    * para calcular el siguiente movimiento de acuerdo con el estado actual del juego, con el fin
+                    * de no perder. El argumento profundidad indica el nivel actual en el árbol del juego. Se calcula
+                    * dado el estado actual, generar todas las posibilidades. Elegir la que minimice la pérdida mayor.
                     * */
                     calificacionActual = minimax(profundidad-1, contrario)[0]
                     if(calificacionActual > mejorCalificacion) {
@@ -202,7 +206,8 @@ class JugadorAutomatic(tablero: Tablero) {
                         mejorRenglon = it[0]
                         mejorColumna = it[1]
                     }
-                } else {
+                }
+                else {
                     /*
                     *
                     * Completa el código:
